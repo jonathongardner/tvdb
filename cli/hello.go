@@ -8,18 +8,13 @@ import (
 var helloCommand =  &cli.Command{
 	Name:    "hello",
 	Aliases: []string{"b"},
-	Usage:   "backup photos in folder",
-	Flags: []cli.Flag {
-		&cli.StringFlag{
-			Name:    "who",
-			Aliases: []string{"w"},
-			Value:   "world",
-			EnvVars: []string{"USER"},
-			Usage:   "Who to say hello to",
-		},
-	},
+	Usage:   "Say hello to someone",
+	ArgsUsage: "[who]",
 	Action:  func(c *cli.Context) error {
-		who := c.String("who")
+		who := c.Args().Get(0)
+		if who == "" {
+			who = "world"
+		}
 		log.Infof("Hello %v", who)
 
 		return nil
