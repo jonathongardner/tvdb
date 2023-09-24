@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jonathongardner/go-starter/routines"
+	"github.com/jonathongardner/dvddb/routines"
 
-	"github.com/urfave/cli/v2"
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
 type greeting struct {
 	name  string
 	count int
 }
+
 func (g *greeting) Run(rc *routines.Controller) error {
 	t := (2 * g.count) + 2
 	time.Sleep(time.Duration(t) * time.Second)
@@ -21,15 +22,16 @@ func (g *greeting) Run(rc *routines.Controller) error {
 	return nil
 }
 
-type waiting struct {}
+type waiting struct{}
+
 func (w *waiting) Run(rc *routines.Controller) error {
 	count := 0
 	for {
 		select {
-		case <- rc.IsDone():
+		case <-rc.IsDone():
 			return nil
 		default:
-			if (count > 8) {
+			if count > 8 {
 				return fmt.Errorf("To many people!")
 			}
 			time.Sleep(1 * time.Second)
@@ -40,13 +42,12 @@ func (w *waiting) Run(rc *routines.Controller) error {
 	return nil
 }
 
-
-var mgCommand =  &cli.Command{
-	Name:    "many-greetings",
-	Aliases: []string{"m"},
-	Usage:   "say many hellos",
+var mgCommand = &cli.Command{
+	Name:      "many-greetings",
+	Aliases:   []string{"m"},
+	Usage:     "say many hellos",
 	ArgsUsage: "[whos]",
-	Flags: []cli.Flag {
+	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:    "how-many",
 			Value:   5,
@@ -60,8 +61,8 @@ var mgCommand =  &cli.Command{
 			},
 		},
 	},
-	Action:  func(c *cli.Context) error {
-		if (c.NArg() == 0) {
+	Action: func(c *cli.Context) error {
+		if c.NArg() == 0 {
 			return fmt.Errorf("Must pass someone to talk to.")
 		}
 

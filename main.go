@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jonathongardner/go-starter/cli"
+	"github.com/jonathongardner/dvddb/cli"
 
 	log "github.com/sirupsen/logrus"
 )

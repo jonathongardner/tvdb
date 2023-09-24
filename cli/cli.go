@@ -3,37 +3,36 @@ package cli
 import (
 	"fmt"
 	"os"
-	"github.com/jonathongardner/go-starter/app"
 
-	"github.com/urfave/cli/v2"
+	"github.com/jonathongardner/dvddb/app"
+
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
-
-func Run() (error) {
+func Run() error {
 	cli.VersionPrinter = func(c *cli.Context) {
 		fmt.Println(c.App.Version)
 	}
 	cli.VersionFlag = &cli.BoolFlag{
-		Name: "version",
+		Name:  "version",
 		Usage: "print the version",
 	}
 
-	flags := []cli.Flag {
+	flags := []cli.Flag{
 		&cli.BoolFlag{
-			Name: "verbose",
+			Name:    "verbose",
 			Aliases: []string{"v"},
-			Usage: "logging level",
+			Usage:   "logging level",
 		},
 	}
 
-
 	app := &cli.App{
-		Name: "starter",
+		Name:    "dvddb",
 		Version: app.Version,
-		Usage: "Example starter app for cli tools!",
+		Usage:   "App for help naming ripped dvds!",
 		Commands: []*cli.Command{
-			helloCommand,
+			tvCommand,
 			mgCommand,
 		},
 		Flags: flags,
