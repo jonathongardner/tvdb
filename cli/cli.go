@@ -28,6 +28,7 @@ func Run() error {
 	}
 
 	app := &cli.App{
+		// EnableBashCompletion: true,
 		Name:    "dvddb",
 		Version: app.Version,
 		Usage:   "App for help naming ripped dvds!",
