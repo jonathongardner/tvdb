@@ -43,15 +43,17 @@ func (sh *Show) Seasons() []*Season {
 }
 
 func (sh *Show) Match(input string) bool {
-	return strings.Contains(strings.ToLower(sh.show), strings.ToLower(input))
+	return strings.Contains(strings.ToLower(sh.show), input)
 }
 
 func (sh *Show) SelectSeason() (*Season, error) {
 	seasons := sh.Seasons()
 	prompt := promptui.Select{
-		Label:     "Select season " + sh.show,
-		Items:     seasons,
-		Searcher:  searcher(seasons[0]),
+		Label: "Select season " + sh.show,
+		Items: seasons,
+		Searcher: func(input string, index int) bool {
+			return seasons[index].Match(strings.ToLower(input))
+		},
 		Templates: templates,
 	}
 

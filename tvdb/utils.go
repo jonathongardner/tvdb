@@ -13,15 +13,15 @@ func sortedKeys(toSort []string) []string {
 	return toSort
 }
 
-type matcher interface {
-	Match(string) bool
-}
+// type matcher interface {
+// 	Match(string) bool
+// }
 
-func searcher(mats matcher) func(string, int) bool {
-	return func(input string, index int) bool {
-		return mats.Match(input)
-	}
-}
+// func searcher(mats []matcher) func(string, int) bool {
+// 	return func(input string, index int) bool {
+// 		return mats[index].Match(strings.ToLower(input))
+// 	}
+// }
 
 var templates = &promptui.SelectTemplates{
 	Label:    "{{ . }}?",

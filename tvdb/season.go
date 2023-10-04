@@ -39,15 +39,25 @@ func (s *Season) Episodes() []*Episode {
 }
 
 func (s *Season) Match(input string) bool {
-	return strings.Contains(strings.ToLower(s.season), strings.ToLower(input))
+	if strings.Contains(strings.ToLower(s.season), input) {
+		return true
+	}
+	for _, e := range s.episodes {
+		if e.MatchTitle(input) {
+			return true
+		}
+	}
+	return false
 }
 
 func (s *Season) SelectEpisode() (*Episode, error) {
 	episodes := s.Episodes()
 	prompt := promptui.Select{
-		Label:     "Select episode from " + s.show + " " + s.season,
-		Items:     episodes,
-		Searcher:  searcher(episodes[0]),
+		Label: "Select episode from " + s.show + " " + s.season,
+		Items: episodes,
+		Searcher: func(input string, index int) bool {
+			return episodes[index].Match(strings.ToLower(input))
+		},
 		Templates: templates,
 	}
 

@@ -62,10 +62,10 @@ func movefile(destFolder string, source string, episode *Episode) error {
 	}
 
 	destination := filepath.Join(destDir, episode.Filename())
-	err = os.Rename(source, destination)
-	if err != nil {
-		return err
-	}
+	// err = os.Rename(source, destination)
+	// if err != nil {
+	// 	return err
+	// }
 
 	log.Infof("Moved %v to %v\n", source, destination)
 	return nil

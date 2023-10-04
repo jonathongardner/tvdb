@@ -18,9 +18,20 @@ func (e *Episode) Value() string {
 	return "(" + e.Episode + ") " + e.Title
 }
 
-func (e *Episode) Match(input string) bool {
-	return input == e.Episode || strings.Contains(strings.ToLower(e.Title), strings.ToLower(input))
+// --------------Match------------
+func (e *Episode) MatchTitle(input string) bool {
+	return strings.Contains(strings.ToLower(e.Title), input)
 }
+
+func (e *Episode) MatchEpisode(input string) bool {
+	return input == e.Episode
+}
+
+func (e *Episode) Match(input string) bool {
+	return e.MatchEpisode(input) || e.MatchTitle(input)
+}
+
+//--------------Match------------
 
 func (e *Episode) showWithYear() string {
 	return e.Show + " (" + e.Year + ")"

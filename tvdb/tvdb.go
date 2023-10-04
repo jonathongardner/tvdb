@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/manifoldco/promptui"
 	"golang.org/x/exp/maps"
@@ -53,9 +54,11 @@ func (db *DB) Shows() []*Show {
 func (db *DB) SelectShow() (*Show, error) {
 	shows := db.Shows()
 	prompt := promptui.Select{
-		Label:     "Select show",
-		Items:     shows,
-		Searcher:  searcher(shows[0]),
+		Label: "Select show",
+		Items: shows,
+		Searcher: func(input string, index int) bool {
+			return shows[index].Match(strings.ToLower(input))
+		},
 		Templates: templates,
 	}
 
