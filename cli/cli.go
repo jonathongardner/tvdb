@@ -34,7 +34,6 @@ func Run() error {
 		Usage:   "App for help naming ripped dvds!",
 		Commands: []*cli.Command{
 			tvCommand,
-			mgCommand,
 		},
 		Flags: flags,
 		Before: func(c *cli.Context) error {

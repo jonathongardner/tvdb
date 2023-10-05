@@ -50,10 +50,10 @@ func (s *Season) Match(input string) bool {
 	return false
 }
 
-func (s *Season) SelectEpisode() (*Episode, error) {
+func (s *Season) SelectEpisode(file string) (*Episode, error) {
 	episodes := s.Episodes()
 	prompt := promptui.Select{
-		Label: "Select episode from " + s.show + " " + s.season,
+		Label: "What episode is " + file + "?",
 		Items: episodes,
 		Searcher: func(input string, index int) bool {
 			return episodes[index].Match(strings.ToLower(input))
