@@ -6,29 +6,28 @@ import (
 )
 
 type Episode struct {
-	Show     string `json:"show"`
-	Year     string `json:"year"`
-	Season   string `json:"season"`
-	Episode  string `json:"episode"`
-	Title    string `json:"title"`
-	PlexName string `json:"plexName"`
+	Show          string `json:"show"`
+	Year          string `json:"year"`
+	Season        string `json:"season"`
+	Episode       string `json:"episode"`
+	Title         string `json:"title"`
+	PlexName      string `json:"plexName"`
+	seasonEpisode string // s##e##
+	title         string // lowercase title
+}
+
+func (e *Episode) Setup() {
+	e.seasonEpisode = "s" + e.Season + "e" + e.Episode
+	e.title = strings.ToLower(e.Title)
 }
 
 func (e *Episode) Value() string {
-	return "(" + e.Episode + ") " + e.Title
+	return "(" + e.seasonEpisode + ") " + e.Title
 }
 
 // --------------Match------------
-func (e *Episode) MatchTitle(input string) bool {
-	return strings.Contains(strings.ToLower(e.Title), input)
-}
-
-func (e *Episode) MatchEpisode(input string) bool {
-	return input == e.Episode
-}
-
 func (e *Episode) Match(input string) bool {
-	return e.MatchEpisode(input) || e.MatchTitle(input)
+	return strings.Contains(e.title, input) || strings.Contains(e.seasonEpisode, input)
 }
 
 //--------------Match------------
@@ -43,7 +42,7 @@ func (e *Episode) Dir() string {
 }
 
 func (e *Episode) Filename() string {
-	return e.showWithYear() + " - s" + e.Season + "e" + e.Episode + " - " + e.Title + ".mkv"
+	return e.showWithYear() + " - " + e.seasonEpisode + " - " + e.Title + ".mkv"
 }
 
 func (e *Episode) FullPath() string {

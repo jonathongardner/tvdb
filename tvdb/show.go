@@ -10,8 +10,8 @@ import (
 
 // ----------------------Show------------------------
 type Show struct {
-	show    string
-	seasons map[string]*Season
+	show     string
+	episodes map[string]*Episode
 }
 
 func (sh *Show) Value() string {
@@ -19,24 +19,19 @@ func (sh *Show) Value() string {
 }
 
 func (sh *Show) Add(e Episode) {
-	_, ok := sh.seasons[e.Season]
-	if !ok {
-		sh.seasons[e.Season] = &Season{episodes: make(map[string]*Episode), show: sh.show, season: e.Season}
-	}
-	sh.seasons[e.Season].Add(e)
+	sh.episodes[e.Value()] = &e
 }
 
 func (sh *Show) Print() {
-	for _, s := range sh.Seasons() {
-		fmt.Printf("  %v\n", s.show)
-		sh.seasons[s.season].Print()
+	for _, episode := range sh.Episodes() {
+		fmt.Printf("  %v - %v\n", episode.Episode, episode.Title)
 	}
 }
 
-func (sh *Show) Seasons() []*Season {
-	toReturn := make([]*Season, 0, len(sh.seasons))
-	for _, s := range sortedKeys(maps.Keys(sh.seasons)) {
-		toReturn = append(toReturn, sh.seasons[s])
+func (sh *Show) Episodes() []*Episode {
+	toReturn := make([]*Episode, 0, len(sh.episodes))
+	for _, s := range sortedKeys(maps.Keys(sh.episodes)) {
+		toReturn = append(toReturn, sh.episodes[s])
 	}
 
 	return toReturn
@@ -46,13 +41,13 @@ func (sh *Show) Match(input string) bool {
 	return strings.Contains(strings.ToLower(sh.show), input)
 }
 
-func (sh *Show) SelectSeason() (*Season, error) {
-	seasons := sh.Seasons()
+func (sh *Show) SelectEpisode(file string) (*Episode, error) {
+	episodes := sh.Episodes()
 	prompt := promptui.Select{
-		Label: "Select season " + sh.show,
-		Items: seasons,
+		Label: "Select episode for" + file,
+		Items: episodes,
 		Searcher: func(input string, index int) bool {
-			return seasons[index].Match(strings.ToLower(input))
+			return episodes[index].Match(strings.ToLower(input))
 		},
 		Templates: templates,
 	}
@@ -61,7 +56,7 @@ func (sh *Show) SelectSeason() (*Season, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error getting season %v", err)
 	}
-	return seasons[i], nil
+	return episodes[i], nil
 }
 
 // ----------------------Show------------------------

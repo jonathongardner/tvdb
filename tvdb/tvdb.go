@@ -30,7 +30,7 @@ type DB struct {
 func (db *DB) Add(e Episode) {
 	_, ok := db.shows[e.Show]
 	if !ok {
-		db.shows[e.Show] = &Show{seasons: make(map[string]*Season), show: e.Show}
+		db.shows[e.Show] = &Show{episodes: make(map[string]*Episode), show: e.Show}
 	}
 	db.shows[e.Show].Add(e)
 }
@@ -76,6 +76,7 @@ func newDB() (*DB, error) {
 	json.Unmarshal(dbBytes, &episodes)
 
 	for _, e := range episodes {
+		e.Setup()
 		db.Add(e)
 	}
 

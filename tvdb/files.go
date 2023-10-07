@@ -94,15 +94,9 @@ func MoveFiles(output string, input string) error {
 	}
 	//----------Show--------
 
-	//----------Season--------
-	season, err := show.SelectSeason()
-	if err != nil {
-		return err
-	}
-
 	//----------Episodes--------
 	for _, file := range files {
-		episode, err := season.SelectEpisode(file)
+		episode, err := show.SelectEpisode(file)
 		if err != nil {
 			return err
 		}
